@@ -16,7 +16,7 @@ contact: https://github.com/snapcrafters/pyradio/issues
 issues: https://github.com/snapcrafters/pyradio/issues
 source-code: https://github.com//snapcrafters/pyradio
 license: MIT
-version: '0.9.3.9'
+version: '0.9.3.11.30'
 
 architectures:
   - build-on: amd64
