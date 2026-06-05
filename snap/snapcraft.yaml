@@ -26,24 +26,13 @@ platforms:
 apps:
   pyradio:
     command: bin/pyradio
-    plugs: [network, audio-playback, x11, network-bind]
-    environment:
-       LC_ALL: C.UTF-8
-       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/samba"
+    plugs:
+        - audio-playback
+        - network
 
 parts:
   pyradio:
-    source: https://github.com/coderholic/pyradio.git
     plugin: python
-    python-packages:
-        - dnspython
-        - psutil
-        - requests
-    stage-packages:
-        - mplayer
-        - libpulse0
-        - samba-libs
-        - libgpm2
-        - libglu1-mesa
-        - libglut3.12
-        - libslang2
+    source: https://github.com/coderholic/pyradio.git
+    python-requirements:
+        - requirements_pipx.txt
