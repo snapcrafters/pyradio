@@ -1,0 +1,9 @@
+#!/bin/sh
+set -eu
+
+# PyRadio probes players by executable name. Strict snaps cannot rely on
+# host-installed players, so prefer snap-local command shims first, then the
+# staged package binaries.
+export PATH="$SNAP/bin:$SNAP/usr/bin:$PATH"
+
+exec "$SNAP/bin/pyradio" --use-player mpv "$@"
