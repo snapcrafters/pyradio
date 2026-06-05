@@ -7,7 +7,7 @@ description: |
 
   This snap is maintained by the Snapcrafters community, and is not necessarily endorsed or officially maintained by the upstream developers.
 
-base: core20
+base: core24
 grade: stable
 confinement: strict
 
@@ -18,10 +18,10 @@ source-code: https://github.com//snapcrafters/pyradio
 license: MIT
 version: '0.9.3.11.31'
 
-architectures:
-  - build-on: amd64
-  - build-on: arm64
-  - build-on: armhf
+platforms:
+  amd64:
+  arm64:
+  armhf:
 
 apps:
   pyradio:
@@ -45,5 +45,5 @@ parts:
         - samba-libs
         - libgpm2
         - libglu1-mesa
-        - freeglut3
+        - libglut3.12
         - libslang2
