@@ -25,10 +25,11 @@ platforms:
 
 apps:
   pyradio:
-    command: bin/pyradio
+    command: bin/pyradio-wrapper
     plugs:
         - audio-playback
         - network
+        - network-bind
 
 parts:
   pyradio:
@@ -36,3 +37,19 @@ parts:
     source: https://github.com/coderholic/pyradio.git
     python-requirements:
         - requirements_pipx.txt
+    override-build: |
+        git apply "$CRAFT_PROJECT_DIR/snap/local/pyradio-mpv-socket.patch"
+        grep -F "SNAP_USER_COMMON" pyradio/player.py
+        craftctl default
+    stage-packages:
+        - mpv
+        - libblas3
+
+  pyradio-wrapper:
+    plugin: dump
+    source: snap/local
+    organize:
+        mpv: bin/mpv
+        pyradio-wrapper: bin/pyradio-wrapper
+    after:
+        - pyradio

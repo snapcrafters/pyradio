@@ -1,0 +1,11 @@
+--- a/pyradio/player.py
++++ b/pyradio/player.py
+@@ -2625,7 +2625,7 @@
+         if platform.startswith('win'):
+             mpvsocket = r'\\.\pipe\mpvsocket.{}'.format(os.getpid())
+         else:
+-            mpvsocket = '/tmp/mpvsocket.{}'.format(os.getpid())
++            mpvsocket = os.path.join(os.environ.get('SNAP_USER_COMMON', '/tmp'), 'mpvsocket.{}'.format(os.getpid()))
+         if logger.isEnabledFor(logging.DEBUG):
+             logger.debug(f'mpv socket is "{mpvsocket}"')
+         if os.path.exists(mpvsocket):

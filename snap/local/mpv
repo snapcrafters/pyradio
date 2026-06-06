@@ -1,0 +1,26 @@
+#!/bin/sh
+set -eu
+
+# Set staged library paths here, not only in pyradio-wrapper, so direct
+# tests such as `$SNAP/bin/mpv <url>` work from `snap run --shell pyradio` and
+# PyRadio's spawned mpv process has the same environment.
+for libdir in "$SNAP"/usr/lib/* "$SNAP"/usr/lib/*/pulseaudio "$SNAP"/usr/lib/*/blas "$SNAP"/usr/lib/*/lapack; do
+    if [ -d "$libdir" ]; then
+        export LD_LIBRARY_PATH="$libdir${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+    fi
+done
+
+if [ -z "${PULSE_SERVER:-}" ] && [ -S "/run/user/$(id -u)/pulse/native" ]; then
+    export PULSE_SERVER="unix:/run/user/$(id -u)/pulse/native"
+fi
+
+# Keep mpv's config lookup inside the snap's user data. PyRadio writes a
+# [pyradio] mpv profile there and launches mpv with --profile=pyradio, so
+# --no-config breaks full-app playback even though direct mpv tests work.
+mkdir -p "$SNAP_USER_DATA/.config/mpv"
+
+# Force PulseAudio. In this snap mpv's default AO probing falls through
+# PipeWire/ALSA/JACK/SDL paths whose host configuration is not available under
+# strict confinement. The audio-playback interface supports the PulseAudio API
+# (including pipewire-pulse on modern desktops), so use that directly.
+exec "$SNAP/usr/bin/mpv" --config-dir="$SNAP_USER_DATA/.config/mpv" --ao=pulse "$@"
