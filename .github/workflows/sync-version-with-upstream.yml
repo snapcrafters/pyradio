@@ -25,5 +25,9 @@ jobs:
             # Update the snapcraft.yaml to match upstream version
             API="https://api.github.com/repos/coderholic/pyradio/releases/latest"
             VERSION=$(curl -s "${API}" | jq -r .tag_name | sed 's/v//g')
-            sed -i 's/^\(version: \).*$/\1'"'$VERSION'"'/' snap/snapcraft.yaml 
+            if [[ -z "$VERSION" || "$VERSION" == null ]]; then
+              echo '::error::No upstream PyRadio release tag found'
+              exit 1
+            fi
+            sed -i 's/^\(version: \).*$/\1'"'$VERSION'"'/' snap/snapcraft.yaml
 
